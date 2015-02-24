@@ -1,0 +1,113 @@
+doctype html
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/stylesheets/style.css')
+  body
+    #main
+        #header
+            #logo
+                #logo_text
+                    h1
+                        a(href="/home") CA
+                            span(class="logo_colour") MSC
+                    h2 Captital Area Middle School Conference
+            #menubar
+                ul(id="menu")
+                    li(name="home")
+                        a(href="home") Home
+                    li(name="handbook")
+                        a(href="handbook") Handbook
+                    li(name="standings")
+                        a(href="standings") Current Standings
+                    li(name="archives")
+                        a(href="archives") Archives
+                    li(name="directory")
+                        a(href="directory") Directory
+
+        #content_header
+        #site_content
+            #sidebar_container
+                .sidebar
+                    .sidebar_top
+                    .sidebar_item
+                        h3 Latest News
+                        #news(about='news' class='newsBlock')
+                            div(property='content')
+                                if typeof(news_content) !== 'undefined'
+                                    != news_content
+                                else
+                                    | [edit here]
+                    .sidebar_base
+                .sidebar
+                    .sidebar_top
+                    .sidebar_item
+                        h3 Links
+                        ul
+                            li
+                                #quickLink1(about='quickLink1' class='quickLinkBlock')
+                                    div(property='content')
+                                        if typeof(quickLink1_content) !== 'undefined'
+                                            != quickLink1_content
+                                        else
+                                            | [edit here]
+                            li
+                                #quickLink2(about='quickLink2' class='quickLinkBlock')
+                                    div(property='content')
+                                        if typeof(quickLink2_content) !== 'undefined'
+                                            != quickLink2_content
+                                        else
+                                            | [edit here]
+                            li
+                                #quickLink3(about='quickLink3' class='quickLinkBlock')
+                                    div(property='content')
+                                        if typeof(quickLink3_content) !== 'undefined'
+                                            != quickLink3_content
+                                        else
+                                            | [edit here]
+                            li
+                                #quickLink4(about='quickLink4' class='quickLinkBlock')
+                                    div(property='content')
+                                        if typeof(quickLink4_content) !== 'undefined'
+                                            != quickLink4_content
+                                        else
+                                            | [edit here]
+                    .sidebar_base
+                //- .sidebar
+                //-    .sidebar_top
+                //-    .sidebar_item
+                //-    .sidebar_base
+            #content
+                block content
+        #content_footer
+        #footer
+            p
+                a(href="home") Home | 
+                a(href="handbook") Handbook | 
+                a(href="standings") Current Standings | 
+                a(href="archives") Archives | 
+                a(href="directory") Directory
+            p Copyright &copy; simplestyle_4 | 
+                a(href="http://validator.w3.org/check?uri=referer") HTML5 | 
+                a(href="http://jigsaw.w3.org/css-validator/check/referer") CSS | 
+                a(href="http://www.html5webtemplates.co.uk") design from HTML5webtemplates.co.uk
+  
+script(type='text/javascript', src='/javascripts/jquery-1.11.2.min.js')
+script(type='text/javascript', src='/javascripts/layout.js')
+script(src='http://code.jquery.com/ui/1.9.2/jquery-ui.js')
+script(src='/javascripts/underscore-min.js')
+script(src='/javascripts/backbone-min.js')
+script(src='/javascripts/vie-min.js')
+script(src='/javascripts/jquery.tagsinput.min.js')
+script(src='/javascripts/jquery.rdfquery.min.js')
+script(src='/javascripts/annotate-min.js')
+script(src='/javascripts/rangy-core-1.2.3.js')
+script(src='/javascripts/hallo-min.js')
+script(src='/javascripts/aloha/lib/require.js')
+script(src='/javascripts/aloha/lib/aloha-full.min.js', data-aloha-plugins='common/ui,common/format,common/link,common/image,common/align,common/list,common/commands,common/paste,common/undo,common/table,extra/textcolor,extra/sourceview')
+script(src='/javascripts/create-min.js')
+script(src='/javascripts/contentblocks.js')
+
+link(rel='stylesheet', href='http://cdn.aloha-editor.org/latest/css/aloha.css')
+link(rel='stylesheet', href='/stylesheets/create-ui/css/create-ui.css')
+link(rel='stylesheet', href='/stylesheets/midgard-notifications/midgardnotif.css')
