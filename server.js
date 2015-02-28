@@ -31,6 +31,8 @@ var CapitalAreaMSC = function() {
         self.ipaddress = process.env.OPENSHIFT_NODEJS_IP;
         self.port      = process.env.OPENSHIFT_NODEJS_PORT || 80;
         self.host      = process.env.OPENSHIFT_APP_DNS || 'localhost';
+        
+        self.db_connection = process.env.OPENSHIFT_MONGODB_DB_URL || 'mongodb://localhost:27017/camsc';
 
         if (typeof self.ipaddress === "undefined") {
             //  Log errors on OpenShift but continue w/ 127.0.0.1 - this
@@ -203,7 +205,7 @@ var CapitalAreaMSC = function() {
     */
     self.initializeDb = function() {
         var mongo = require('mongoskin');
-        var db = mongo.db('mongodb://localhost:27017/camsc', {native_parser:true});
+        var db = mongo.db(self.db_connection, {native_parser:true});
         
         self.contentProvider = new ContentProvider(db);
         self.app.use(function(req,res,next){
