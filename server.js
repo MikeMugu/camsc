@@ -1,13 +1,19 @@
 #!/bin/env node
-//  OpenShift sample Node application
-var express = require('express');
-var fs      = require('fs');
 
+var express         = require('express');
+var fs              = require('fs');
+var path            = require('path');
+var bodyParser      = require('body-parser');
+var cookieParser    = require('cookie-parser');
+var logger          = require('morgan');
+var favicon         = require('serve-favicon');
+
+var ContentProvider = require('./providers/mongoProvider-content').ContentProvider;
 
 /**
- *  Define the sample application.
+ *  Define the application.
  */
-var SampleApp = function() {
+var CapitalAreaMSC = function() {
 
     //  Scope.
     var self = this;
@@ -23,7 +29,8 @@ var SampleApp = function() {
     self.setupVariables = function() {
         //  Set the environment variables we need.
         self.ipaddress = process.env.OPENSHIFT_NODEJS_IP;
-        self.port      = process.env.OPENSHIFT_NODEJS_PORT || 8080;
+        self.port      = process.env.OPENSHIFT_NODEJS_PORT || 80;
+        self.host      = process.env.OPENSHIFT_APP_DNS || 'localhost';
 
         if (typeof self.ipaddress === "undefined") {
             //  Log errors on OpenShift but continue w/ 127.0.0.1 - this
@@ -93,17 +100,42 @@ var SampleApp = function() {
      *  Create the routing table entries + handlers for the application.
      */
     self.createRoutes = function() {
-        self.routes = { };
+        var routes = require('./routes');
+        var users = require('./routes/users');
 
-        self.routes['/asciimo'] = function(req, res) {
-            var link = "http://i.imgur.com/kmbjB.png";
-            res.send("<html><body><img src='" + link + "'></body></html>");
-        };
+        self.app.use('/', routes);
+        self.app.use('/users', users);
+        self.app.use(express.static(__dirname + '/public'));
+        
+        self.app.use(function(req, res, next) {
+            var err = new Error('Not Found');
+            err.status = 404;
+            next(err);
+        });
+        
+        // error handlers
 
-        self.routes['/'] = function(req, res) {
-            res.setHeader('Content-Type', 'text/html');
-            res.send(self.cache_get('index.html') );
-        };
+        // development error handler
+        // will print stacktrace
+        if (self.app.get('env') === 'development') {
+            self.app.use(function(err, req, res, next) {
+                res.status(err.status || 500);
+                res.render('error', {
+                    message: err.message,
+                    error: err
+                });
+            });
+        }
+
+        // production error handler
+        // no stacktraces leaked to user
+        self.app.use(function(err, req, res, next) {
+            res.status(err.status || 500);
+            res.render('error', {
+                message: err.message,
+                error: {}
+            });
+        });       
     };
 
 
@@ -112,13 +144,19 @@ var SampleApp = function() {
      *  the handlers.
      */
     self.initializeServer = function() {
-        self.createRoutes();
-        self.app = express.createServer();
+        self.app = express();
+        
+        // view engine setup
+        self.app.set('views', path.join(__dirname, 'views'));
+        self.app.set('view engine', 'jade');
+        
+        self.app.use(bodyParser.json());
+        self.app.use(cookieParser());
+        self.app.use(express.static(path.join(__dirname, 'public')));
+        self.app.use(logger('dev'));
 
-        //  Add handlers for the app (from the routes).
-        for (var r in self.routes) {
-            self.app.get(r, self.routes[r]);
-        }
+        // setup utility modules
+        self.app.locals.moment = require('moment');
     };
 
 
@@ -132,8 +170,47 @@ var SampleApp = function() {
 
         // Create the express server and routes.
         self.initializeServer();
+        
+        // setup CMS editing plugin
+        self.initializeContentBlocks();
+        
+        // setup the database
+        self.initializeDb();
+        
+        // create routes
+        self.createRoutes();
     };
-
+    
+    /**
+    * Initializes the contentBlocks/CreateJS.org plugin
+    */
+    self.initializeContentBlocks = function() {
+        self.contentBlocks = require('contentblocks')(
+        { 
+            app: self.app, 
+            host: 'localhost', 
+            pathFind: '/content/find?q={"@subject":"[id]"}',
+            pathPost: '/content', 
+            pathPut: '/content/[id]', 
+            pathDelete: '/content/[id]' 
+        });
+        
+        self.app.use(self.contentBlocks.render);        
+    };
+    
+    /**
+    * Sets up the connection to mongoDB.
+    */
+    self.initializeDb = function() {
+        var mongo = require('mongoskin');
+        var db = mongo.db('mongodb://localhost:27017/camsc', {native_parser:true});
+        
+        self.contentProvider = new ContentProvider(db);
+        self.app.use(function(req,res,next){
+            req.contentProvider = self.contentProvider;
+            next();
+        });
+    };
 
     /**
      *  Start the server (starts up the sample application).
@@ -141,19 +218,17 @@ var SampleApp = function() {
     self.start = function() {
         //  Start the app on the specific interface (and port).
         self.app.listen(self.port, self.ipaddress, function() {
-            console.log('%s: Node server started on %s:%d ...',
-                        Date(Date.now() ), self.ipaddress, self.port);
+            console.log('%s: Node server started on %s:%d ...', Date(Date.now() ), self.ipaddress, self.port);
         });
     };
 
-};   /*  Sample Application.  */
-
+};   
 
 
 /**
  *  main():  Main code.
  */
-var zapp = new SampleApp();
-zapp.initialize();
-zapp.start();
+var camsc = new CapitalAreaMSC();
+camsc.initialize();
+camsc.start();
 
