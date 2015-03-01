@@ -80,5 +80,18 @@ GenUtil = {
         }
 
         return result;
-    }        
+    },
+    
+    isAdmin: function (req) {
+        var ip = req.connection.remoteAddress;
+        
+        console.log('Checking for admin for remote ip ' + ip);
+        
+        var result = ((ip == '127.0.0.1' || ip == '99.98.184.48') && req.query['admin'] == '1');
+        if (result) {
+            console.log('Granting permission to edit the site to remote ip ' + ip);
+        }
+        
+        return result;
+    }
 };
