@@ -56,6 +56,34 @@ GenUtil = {
         }
     },
     
+    /**
+    * Check to see if the incoming IP address is whitelisted, and the request 
+    * specifies the admin=1 param value.
+    */
+    isAdmin: function (req) {
+        var ip = this.getIpAddress(req);
+        
+        console.log('Checking for admin for remote ip ' + ip);
+        
+        var result = ((ip == '127.0.0.1' || ip == '99.98.184.48') && req.query['admin'] == '1');
+        if (result) {
+            console.log('Granting permission to edit the site to remote ip ' + ip);
+        }
+        
+        return result;
+    },
+    
+    /**
+    * Attempts to get the REAL ip address from the rquest. We look in the forward info
+    * in case a proxy is being used (such is the case when hosting in OpenShift).
+    */
+    getIpAddress: function(req) {
+        return req.headers['x-forwarded-for'] || 
+            req.connection.remoteAddress || 
+            req.socket.remoteAddress || 
+            req.connection.socket.remoteAddress;        
+    },    
+    
     tryParseJson: function (data, onJson) {
         try {
             // Try parsing the JSON object.
@@ -79,19 +107,6 @@ GenUtil = {
             }
         }
 
-        return result;
-    },
-    
-    isAdmin: function (req) {
-        var ip = req.connection.remoteAddress;
-        
-        console.log('Checking for admin for remote ip ' + ip);
-        
-        var result = ((ip == '127.0.0.1' || ip == '99.98.184.48' || ip == '127.13.163.129') && req.query['admin'] == '1');
-        if (result) {
-            console.log('Granting permission to edit the site to remote ip ' + ip);
-        }
-        
         return result;
     }
 };
