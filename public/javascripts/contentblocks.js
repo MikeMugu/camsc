@@ -3,8 +3,6 @@
 // The service should accept GET/POST/PUT/UPDATE/DELETE with a JSON object. [id] will be replaced by the CMS content block id.
 // Example: http://your.service.com/api/findById?id=[id]
 //
-var host = env.process.OPENSHIFT_NODEJS_IP || localhost;
-var port = env.process.OPENSHIFT_NODEJS_PORT || '80';
 var restUrl = 'http://camsc-camsc.rhcloud.com/content/find?q={"@subject": "[id]"}';
 var apiKey = ''; // Unique key for the demo REST web service, red-ant.herokuapp.com. If you use the demo service, change this key to be unique. If using your own service, you can leave this blank.
 var editor = 'aloha'; // Editor can be aloha or hallo.
