@@ -4,6 +4,6 @@ var genUtil = require('../utils/genUtil');
 exports.get = function(req, res) {
     res.render('archives', {
         title: 'Archives',
-        isAdmin: genUtil.isAdmin(req)
+        isAdmin: GenUtil.isAdmin(req)
     });
 }
