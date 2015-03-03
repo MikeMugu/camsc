@@ -70,7 +70,7 @@ Backbone.sync = function (method, model, options) {
             type: 'POST',
             data: CommonManager.encodeId(JSON.stringify(model)),
             contentType: 'application/json',
-            dataType: 'json',
+            dataType: 'jsonp',
             success: function (data) {
                 options.success(model);
             }
