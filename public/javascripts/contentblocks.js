@@ -10,6 +10,7 @@ var loaded = false;
 
 $(document).ready(function () {
 	if (editor == 'aloha') {
+        
 		// Enable Aloha editor.
 		$('body').midgardCreate({
 			// Use Aloha for all text editing
@@ -25,7 +26,7 @@ $(document).ready(function () {
 			  'default': null,
 			  'feature': 'midgardCollectionAdd'
 			},
-			state: 'edit'
+			state: 'browse'
 		});
 	}
 	else {
@@ -38,7 +39,7 @@ $(document).ready(function () {
 				'default': 'midgardCollectionAdd',
 				'skos:related': null
 			},
-			state: 'edit'
+			state: 'browse'
 		});
 	}
 	
