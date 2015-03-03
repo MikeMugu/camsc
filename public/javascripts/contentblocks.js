@@ -70,7 +70,7 @@ Backbone.sync = function (method, model, options) {
             type: 'POST',
             data: CommonManager.encodeId(JSON.stringify(model)),
             contentType: 'application/json',
-            dataType: 'jsonp',
+            dataType: 'json',
             success: function (data) {
                 options.success(model);
             }
@@ -83,7 +83,7 @@ Backbone.sync = function (method, model, options) {
         $.ajax({
             url: restUrl.replace('[id]', CommonManager.encodeId(model.id)),
             type: 'GET',
-            dataType: 'json',
+            dataType: 'jsonp',
             success: function (data) {
                 if (data.length == 0) {
                     // Create new entry.	
