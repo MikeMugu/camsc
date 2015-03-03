@@ -190,7 +190,7 @@ var CapitalAreaMSC = function() {
         self.contentBlocks = require('contentblocks')(
         { 
             app: self.app, 
-            host: self.host, 
+            host: 'http://www.capitalareamsc.com/', 
             pathFind: '/content/find?q={"@subject":"[id]"}',
             pathPost: '/content', 
             pathPut: '/content/[id]', 
