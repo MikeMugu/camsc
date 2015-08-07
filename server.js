@@ -146,6 +146,7 @@ var CapitalAreaMSC = function() {
      *  the handlers.
      */
     self.initializeServer = function() {
+        // initialize express
         self.app = express();
         
         // view engine setup
