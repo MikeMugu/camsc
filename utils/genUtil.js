@@ -62,7 +62,6 @@ GenUtil = {
     */
     isAdmin: function (req) {
         var ip = this.getIpAddress(req);
-        ip = ip.split(",")[0];
         
         console.log('Checking for admin for remote ip ' + ip);
         
@@ -85,7 +84,11 @@ GenUtil = {
             req.socket.remoteAddress || 
             req.connection.socket.remoteAddress;
         
-        return ip.split(',',1);
+        if (Object.prototype.toString.call(ip) === '[object Array]') {
+            return ip.split(',',1);
+        }
+        
+        return ip;
     },    
     
     tryParseJson: function (data, onJson) {
