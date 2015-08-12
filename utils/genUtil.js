@@ -84,11 +84,7 @@ GenUtil = {
             req.socket.remoteAddress || 
             req.connection.socket.remoteAddress;
         
-        if (Object.prototype.toString.call(ip) === '[object Array]') {
-            return ip.split(',',1);
-        }
-        
-        return ip;
+        return ip.indexOf(",") === -1 ? ip : ip.split(",")[0];
     },    
     
     tryParseJson: function (data, onJson) {
