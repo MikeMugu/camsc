@@ -62,6 +62,7 @@ GenUtil = {
     */
     isAdmin: function (req) {
         var ip = this.getIpAddress(req);
+        ip = ip.split(",")[0];
         
         console.log('Checking for admin for remote ip ' + ip);
         
@@ -79,10 +80,12 @@ GenUtil = {
     * in case a proxy is being used (such is the case when hosting in OpenShift).
     */
     getIpAddress: function(req) {
-        return req.headers['x-forwarded-for'] || 
+        var ip = req.headers['x-forwarded-for'] || 
             req.connection.remoteAddress || 
             req.socket.remoteAddress || 
-            req.connection.socket.remoteAddress;        
+            req.connection.socket.remoteAddress;
+        
+        return ip.split(',',1);
     },    
     
     tryParseJson: function (data, onJson) {
