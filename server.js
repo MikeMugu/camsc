@@ -32,8 +32,23 @@ var CapitalAreaMSC = function() {
         self.port      = process.env.OPENSHIFT_NODEJS_PORT || 80;
         self.host      = process.env.OPENSHIFT_APP_DNS || 'localhost';
         
-        self.db_connection = process.env.OPENSHIFT_MONGODB_DB_URL || 'mongodb://localhost:27017/camsc';
+        // self.db_connection = process.env.OPENSHIFT_MONGODB_DB_URL || 'mongodb://localhost:27017/camsc';
 
+        // default to a 'localhost' configuration:
+        self.db_connection = '127.0.0.1:27017/camsc';
+        
+        // if OPENSHIFT env variables are present, use the available connection info:
+        if(process.env.OPENSHIFT_MONGODB_DB_PASSWORD){
+            self.db_connection = process.env.OPENSHIFT_MONGODB_DB_USERNAME + ":" +
+                process.env.OPENSHIFT_MONGODB_DB_PASSWORD + "@" +
+                process.env.OPENSHIFT_MONGODB_DB_HOST + ':' +
+                process.env.OPENSHIFT_MONGODB_DB_PORT + '/' +
+                process.env.OPENSHIFT_APP_NAME;
+        }
+        
+        // default to a 'localhost' configuration:
+        var connection_string = '127.0.0.1:27017/YOUR_APP_NAME';
+        
         if (typeof self.ipaddress === "undefined") {
             //  Log errors on OpenShift but continue w/ 127.0.0.1 - this
             //  allows us to run/test the app locally.
