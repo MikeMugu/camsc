@@ -25,12 +25,15 @@ exports.find = function(req, res) {
         }
         else {
             try {
+                console.log("[content.find] called using query " + query);
                 contentProvider.find(query, function(error, items) {
                     if (!error && items != null) {
+                        console.log("Found items " + items);
                         res.json(items);
                     }
                     else {
                         // No records found
+                        console.log("[content.find] No records found.");
                         res.status(404).json({ error: 'No records found.' });
                     }
                 });
@@ -56,9 +59,12 @@ exports.find = function(req, res) {
 exports.get = function(req, res) {
     var contentProvider = req.contentProvider;
     var itemId = req.params.itemId;
+    
+    console.log("[content.get] Getting item with itemId " + itemId);
     try {
         contentProvider.findOne(itemId, function(error, result) {
             if (!error) {
+                console.log("[content.get] Found item with itemId " + itemId + " to have data " + result);
                 res.json(result);
             }
             else {
@@ -85,6 +91,7 @@ exports.get = function(req, res) {
 */
 exports.create = function(req, res) {
     var contentProvider = req.contentProvider;
+    console.log("[content.create] Creating item with request " + req);
     // Read post data.
     easypost.get(req, res, function (data) {
         // Check for script injection in json, unless url contains ?script=1
@@ -94,11 +101,13 @@ exports.create = function(req, res) {
         else {
             try {
                 // Insert the new item.
+                console.log("[content.create] Saving data " + data);
                 contentProvider.save(data, function(err) {
                     if (err != null) {
                         GenUtil.sendError(err);
                     }
                     else {
+                        console.log("[content.create] Data saved. Response data " + data);
                         res.json(data);
                     }
                 });
@@ -125,6 +134,7 @@ exports.create = function(req, res) {
 */
 exports.update = function(req, res) {
     var contentProvider = req.contentProvider;
+    console.log("[content.update] Update called with request " + req);
     
     // Read post data.
     easypost.get(req, res, function (data) {
@@ -135,7 +145,9 @@ exports.update = function(req, res) {
         else {
             try {
                 var itemId = req.params.itemId;
+                console.log("[content.update] Updating item " + itemId + " with data " + data);
                 contentProvider.update(itemId, data, function(data, count) {
+                    console.log("[content.update] Updated item with itemId " + itemId + " and data " + data);
                     res.json({ document: data, updated: count });
                 });
             }
@@ -157,7 +169,9 @@ exports.delete = function(req, res) {
     
     try {
         var itemId = req.params.itemId;
+        console.log("[content.delete] Deleting item with itemId " + itemId);
         contentProvider.delete(itemId, function(itemId, count) {
+            console.log("[content.delete] Successfully deleted item with itemId " + itemId);
             res.json({ id: itemId, deleted: count });
         });
     }

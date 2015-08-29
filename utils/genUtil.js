@@ -10,6 +10,7 @@ GenUtil = {
     * @param message String representing the error message to send.
     */
     sendError: function(res, message) {
+        console.log("Error " + message);
         res.status(500).json({ error: message });
     },
     

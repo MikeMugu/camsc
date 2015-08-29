@@ -46,7 +46,6 @@ ContentProvider.prototype.findOne = function(itemId, callback) {
             callback(error);
         }
         else {
-            debugger;
             var id = mongo.ObjectID.createFromHexString(itemId);
             content_collection.findOne({'_id': id }, function(err, document) {
                 if (!err && document != null) {
@@ -77,6 +76,7 @@ ContentProvider.prototype.findOne = function(itemId, callback) {
 * });
 */
 ContentProvider.prototype.find = function(query, callback) {
+    console.log("find called with query " + query);
     this.getCollection(function(error, content_collection) {
         if (error) {
             callback(error);
