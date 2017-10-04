@@ -151,7 +151,7 @@ var CapitalAreaMSC = function() {
         
         // view engine setup
         self.app.set('views', path.join(__dirname, 'views'));
-        self.app.set('view engine', 'jade');
+        self.app.set('view engine', 'pug');
         
         self.app.use(bodyParser.json());
         self.app.use(cookieParser());
@@ -174,14 +174,14 @@ var CapitalAreaMSC = function() {
         // Create the express server and routes.
         self.initializeServer();
         
-        // setup CMS editing plugin
-        self.initializeContentBlocks();
-        
         // setup the database
         self.initializeDb();
-        
+              
         // create routes
         self.createRoutes();
+
+        // setup CMS editing plugin
+        self.initializeContentBlocks();
     };
     
     /**
