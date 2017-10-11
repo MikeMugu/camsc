@@ -30,7 +30,6 @@
     "body-parser": "~1.8.2",
     "contentblocks": "0.1.8",
     "cookie-parser": "^1.4.3",
-    "debug": "~3.1.0",
     "easypost": "0.1.1",
     "express": "~4.16.1",
     "pug": "~2.0.0-rc.4",
