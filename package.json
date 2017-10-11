@@ -13,6 +13,10 @@
     "email": "mikemugu@gmail.com",
     "url": "http://www.capitalareamsc.org/"
   },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "main": "server.js",
   "homepage": "http://www.capitalareamsc.org/",
   "repository": {
     "type": "git",
@@ -41,6 +45,5 @@
     "debug": "~3.1.0"
   },
   "bundleDependencies": [],
-  "private": true,
-  "main": "server.js"
+  "private": true
 }
